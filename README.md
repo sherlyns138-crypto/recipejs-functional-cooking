@@ -1,4 +1,4 @@
-# recipejs-functional-cooking
+# Recipejs-Functional-Cooking-Companion
 A functional programming approach to a recipe companion app
 
 # About this project
