@@ -138,11 +138,36 @@ const RecipeApp = (() => {
         }
     ];
 
+    const updateDisplay = () => {
+    let recipesToDisplay = recipes;
+    
+    // NEW: Apply search FIRST
+    recipesToDisplay = filterBySearch(recipesToDisplay, searchQuery);
+    
+    // Then apply filters
+    recipesToDisplay = applyFilter(recipesToDisplay, currentFilter);
+    
+    // Then apply sorts
+    recipesToDisplay = applySort(recipesToDisplay, currentSort);
+    
+    // NEW: Update counter
+    updateRecipeCounter(recipesToDisplay.length, recipes.length);
+    
+    // Render
+    renderRecipes(recipesToDisplay);
+    updateActiveButtons();
+};
+
     // ============================================
     // STATE
     // ============================================
     let currentFilter = 'all';
     let currentSort = 'none';
+
+    // NEW: Add these
+let searchQuery = '';
+let favorites = JSON.parse(localStorage.getItem('recipeFavorites')) || [];
+let debounceTimer;
 
     // ============================================
     // DOM REFERENCES
@@ -150,6 +175,42 @@ const RecipeApp = (() => {
     const recipeContainer = document.querySelector('#recipe-container');
     const filterButtons = document.querySelectorAll('.filter-btn');
     const sortButtons = document.querySelectorAll('.sort-btn');
+
+    // NEW: Add these
+const searchInput = document.querySelector('#search-input');
+const clearSearchBtn = document.querySelector('#clear-search');
+const recipeCountDisplay = document.querySelector('#recipe-count');
+
+// ============================================
+// FAVORITES MANAGEMENT
+// ============================================
+
+// Save favorites to localStorage
+const saveFavorites = () => {
+    // TODO: Save favorites array to localStorage as JSON
+    // Hint: localStorage.setItem('recipeFavorites', JSON.stringify(favorites))
+    localStorage.setItem('recipeFavorites', JSON.stringify(favorites));
+};
+
+// Toggle favorite status
+const toggleFavorite = (recipeId) => {
+    const id = parseInt(recipeId);
+    
+    if (favorites.includes(id)) {
+        // TODO: Remove from favorites
+        // Hint: Use .filter() to create array without this id
+        favorites = favorites.filter(favId => favId !== id);
+    } else {
+        // TODO: Add to favorites
+        // Hint: Use .push() to add id
+        // YOUR CODE HERE
+        favorites.push(id);
+    }
+    
+    saveFavorites();
+    updateDisplay();
+};
+                                                                                                                                                                                                                    
     // ============================================
     // HELPER FUNCTIONS
     // ============================================
@@ -162,6 +223,14 @@ const RecipeApp = (() => {
             }
         }).join('');
     };
+
+    // NEW: Update recipe counter
+const updateRecipeCounter = (showing, total) => {
+    if (recipeCountDisplay) {
+        // TODO: Set text content to "Showing X of Y recipes"
+        recipeCountDisplay.textContent = `Showing ${showing} of ${total} recipes`;
+    }
+};
 
 // Recursive function to render steps (handles nesting)
 const renderSSteps = (steps, level = 0) => {
@@ -195,8 +264,18 @@ const renderSSteps = (steps, level = 0) => {
 };
     // Updated Recipe Card Template (Step 2)
     const createRecipeCard = (recipe) => {
+           // Check if favorited
+    const isFavorited = favorites.includes(recipe.id);
+    const heartIcon = isFavorited ? '❤️' : '🤍';
         return `
             <div class="recipe-card" data-id="${recipe.id}">
+ <!-- NEW: Favorite Button -->
+            <button class="favorite-btn ${isFavorited ? 'favorited' : ''}" 
+                    data-recipe-id="${recipe.id}">
+                ${heartIcon}
+            </button>
+            
+
                 <h3>${recipe.title}</h3>
                 <div class="recipe-meta">
                     <span>⏱️ ${recipe.time} min</span>
@@ -241,6 +320,7 @@ const renderSSteps = (steps, level = 0) => {
             case 'medium': return filterByDifficulty(recipes, 'medium');
             case 'hard': return filterByDifficulty(recipes, 'hard');
             case 'quick': return filterByTime(recipes, 30);
+            case 'favorites': return filterFavorites(recipes);
             default: return recipes;
         }
     };
@@ -260,12 +340,6 @@ const renderSSteps = (steps, level = 0) => {
     // ============================================
     const renderRecipes = (recipesToRender) => {
         recipeContainer.innerHTML = recipesToRender.map(createRecipeCard).join('');
-    };
-
-    const updateDisplay = () => {
-        let recipesToDisplay = applyFilter(recipes, currentFilter);
-        recipesToDisplay = applySort(recipesToDisplay, currentSort);
-        renderRecipes(recipesToDisplay);
     };
 
     // Create complete steps HTML for a recipe
@@ -290,6 +364,102 @@ const createStepsHTML = (steps) => {
         currentSort = event.target.dataset.sort;
         updateDisplay();
     };
+
+    const filterBySearch = (recipes, query) => {
+    if (!query || query.trim() === '') {
+        return recipes;
+    }
+    
+    const lowerQuery = query.toLowerCase().trim();
+    return recipes.filter(recipe => {
+         // TODO: Search in title
+        const titleMatch = recipe.title.toLowerCase().includes(lowerQuery);
+        
+        // TODO: Search in ingredients (use .some())
+        const ingredientMatch = recipe.ingredients.some(ingredient => 
+            ingredient.toLowerCase().includes(lowerQuery)
+        );
+        
+        // TODO: Search in description
+        const descriptionMatch = recipe.description.toLowerCase().includes(lowerQuery);
+        
+        return titleMatch || ingredientMatch || descriptionMatch;
+    });
+};
+
+// NEW: Search input handler
+const handleSearchInput = (event) => {
+    const query = event.target.value;
+    
+    // Show/hide clear button
+    if (clearSearchBtn) {
+        clearSearchBtn.style.display = query ? 'block' : 'none';
+    }
+    
+    // TODO: Implement debouncing
+    // Clear existing timer
+    clearTimeout(debounceTimer);
+    
+    // Set new timer
+    debounceTimer = setTimeout(() => {
+        // Update search query and display after 300ms
+        searchQuery = query;
+        updateDisplay();
+    }, 300);
+};
+
+// NEW: Clear search handler
+const handleClearSearch = () => {
+    // TODO: Clear input value, query, hide button, update display
+    searchInput.value = '';
+    searchQuery = '';
+    clearSearchBtn.style.display = 'none';
+    updateDisplay();
+};
+
+const setupEventListeners = () => {
+    // Existing listeners
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', handleFilterClick);
+    });
+    
+    sortButtons.forEach(btn => {
+        btn.addEventListener('click', handleSortClick);
+    });
+    
+    recipeContainer.addEventListener('click', handleToggleClick);
+    recipeContainer.addEventListener('click', handleFavoriteClick);
+    
+    // NEW: Add these
+    if (searchInput) {
+        searchInput.addEventListener('input', handleSearchInput);
+    }
+    
+    if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', handleClearSearch);
+    }
+    
+    console.log('Event listeners attached!');
+};
+
+// NEW: Favorite button handler (event delegation)
+const handleFavoriteClick = (event) => {
+    if (!event.target.classList.contains('favorite-btn')) {
+        return;
+    }
+    
+    // TODO: Get recipe ID and toggle favorite
+    const recipeId = event.target.dataset.recipeId;
+    toggleFavorite(recipeId);
+};
+
+     // NEW: Favorites filter
+const filterFavorites = (recipes) => {
+    // TODO: Return only recipes where recipe.id is in favorites array
+    // Hint: Use .filter() and check favorites.includes(recipe.id)
+    return recipes.filter(recipe => favorites.includes(recipe.id));
+};
+
 
     // Handle toggle button clicks using event delegation
 const handleToggleClick = (event) => {
@@ -333,30 +503,15 @@ const updateActiveButtons = () => {
 // ============================================
     // INITIALIZATION
     // ============================================
-    const setupEventListeners = () => {
-        // From Part 2 - filter buttons
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', handleFilterClick);
-        });
-        
-        // From Part 2 - sort buttons
-        sortButtons.forEach(btn => {
-            btn.addEventListener('click', handleSortClick);
-        });
-        
-        // NEW: Event delegation for toggle buttons
-        // One listener on parent handles all toggle buttons
-        recipeContainer.addEventListener('click', handleToggleClick);
-        
-        console.log('Event listeners attached!');
-    };
 
     const init = () => {
-        console.log('RecipeApp initializing...');
-        setupEventListeners();
-        updateDisplay();
-        console.log('RecipeApp ready!');
-    };
+    console.log('🍳 RecipeJS initializing...');
+    setupEventListeners();
+    updateDisplay();
+    console.log('✅ RecipeJS ready!');
+    console.log(`📊 ${recipes.length} recipes loaded`);
+    console.log(`❤️  ${favorites.length} favorites saved`);
+};
 
     // ============================================
     // PUBLIC API

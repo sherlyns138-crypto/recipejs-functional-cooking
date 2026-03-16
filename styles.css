@@ -331,3 +331,85 @@ main {
 .substeps-list .substeps-list li {
     font-size: 0.85rem;
 }
+
+/* Search Container */
+.search-container {
+    max-width: 500px;
+    margin: 1.5rem auto 0;
+    position: relative;
+}
+
+#search-input {
+    width: 100%;
+    padding: 0.75rem 2rem 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+#search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #667eea;
+}
+
+.clear-btn {
+    /* TODO: Position absolute, right side, vertically centered */
+    /* Hint: Use position: absolute, right: 10px, top: 50%, transform: translateY(-50%) */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Recipe Counter */
+.recipe-info {                                  
+    /* TODO: Center text, add margin */
+    text-align: center;
+    margin: 1rem 0;
+}
+
+/* Favorite Button on Cards */
+.favorite-btn {
+
+    /* TODO: Position in top-right corner of card */
+    /* Hint: position: absolute, top: 1rem, right: 1rem */
+    /* Don't forget to add position: relative to .recipe-card */
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.favorite-btn:hover {
+    /* TODO: Scale up slightly */
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .search-container {
+        /* TODO: Adjust margin */
+        margin: 1rem auto 0;
+    }
+    
+    .recipe-card {
+        /* TODO: Consider full width */
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .button-group {
+        /* TODO: Stack buttons vertically */
+        flex-direction: column;
+    }
+    
+    .filter-btn,
+    .sort-btn {
+        /* TODO: Full width */
+        width: 100%;
+    }
+}
