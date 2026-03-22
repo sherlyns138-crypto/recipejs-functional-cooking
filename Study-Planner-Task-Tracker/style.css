@@ -10,7 +10,7 @@ body {
   width: 400px;
   margin: 50px auto;
   background: rgba(255, 255, 255, 0.9);
-  padding: 20px;
+  padding: 40px;
   border-radius: 16px;
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 25px rgba(0,0,0,0.1);
