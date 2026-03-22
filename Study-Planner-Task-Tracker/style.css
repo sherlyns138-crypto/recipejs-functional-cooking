@@ -121,14 +121,14 @@ li {
   font-weight: 600;
   margin-top: 20px;
 
-  background: linear-gradient(90deg, #4facfe, #00c6ff);
+  background: linear-gradient(90deg, #000000, #00c6ff);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 /* Dark subtitle */
 .dark-mode .subtitle {
-  background: linear-gradient(90deg, #6dd5ed, #2193b0);
+  background: linear-gradient(90deg, #def5fa, #2193b0);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
