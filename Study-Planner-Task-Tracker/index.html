@@ -2,17 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <button onclick="toggleDarkMode()" id="themeToggle">🌙</button>
   <title>Study Planner</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-    <p class="subtitle">Stay organized. Stay focused. 🚀</p>
+  <!-- Theme Toggle Button -->
+  <button onclick="toggleDarkMode()" id="themeToggle">🌙</button>
 
-</div>
+  <!-- Subtitle -->
+  <p class="subtitle">Stay organized. Stay focused. 🚀</p>
 
+  <!-- Main Container -->
   <div class="container">
     <h1>📚 Study Planner</h1>
 
@@ -20,7 +26,9 @@
       <input type="text" id="taskInput" placeholder="Enter task">
       <input type="text" id="subjectInput" placeholder="Subject">
       <input type="date" id="dateInput">
+
       <button onclick="addTask()">Add Task</button>
+
       <p id="emptyMessage">No tasks yet. Add one! ✨</p>
     </div>
 
@@ -28,8 +36,6 @@
 
     <ul id="taskList"></ul>
   </div>
-
- 
 
   <script src="script.js"></script>
 </body>

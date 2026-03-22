@@ -5,37 +5,56 @@ body {
   margin: 0;
 }
 
+/* Container */
 .container {
   width: 400px;
   margin: 50px auto;
   background: rgba(255, 255, 255, 0.9);
   padding: 20px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
+/* Inputs */
 input {
-  padding: 8px;
+  padding: 10px;
   margin: 5px;
-  width: 80%;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
 }
 
+/* Buttons */
 button {
-  padding: 8px 12px;
+  padding: 10px 14px;
   margin-top: 10px;
   cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  background: #4facfe;
+  color: white;
+  transition: 0.3s;
 }
 
+button:hover {
+  opacity: 0.9;
+}
+
+/* Task List */
 li {
   list-style: none;
-  padding: 10px;
+  padding: 12px;
   margin: 10px 0;
   background: #eee;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 10px;
 }
 
+/* Completed task */
 .completed {
   text-decoration: line-through;
   color: gray;
@@ -58,7 +77,7 @@ li {
   justify-content: center;
 
   background: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(6px);
   transition: 0.3s;
 }
 
@@ -67,41 +86,38 @@ li {
   transform: scale(1.1);
 }
 
-/* Dark mode button style */
-.dark-mode #themeToggle {
-  background: rgba(255, 255, 255, 0.15);
-}
-
 /* Dark Mode */
 .dark-mode {
-  background: #121212;
+  background: linear-gradient(135deg, #141e30, #243b55);
   color: white;
 }
 
+/* Dark container */
 .dark-mode .container {
   background: rgba(30, 30, 30, 0.9);
 }
 
+/* Dark inputs */
 .dark-mode input {
   background: #333;
   color: white;
   border: 1px solid #555;
 }
 
+/* Dark list */
 .dark-mode li {
   background: #2a2a2a;
 }
 
-/* Dark mode background */
-.dark-mode {
-  background: linear-gradient(135deg, #141e30, #243b55);
-  color: white;
+/* Dark mode button style */
+.dark-mode #themeToggle {
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* Subtitle styling */
+/* Subtitle */
 .subtitle {
   text-align: center;
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 600;
   margin-top: 20px;
 
@@ -110,19 +126,24 @@ li {
   -webkit-text-fill-color: transparent;
 }
 
+/* Dark subtitle */
 .dark-mode .subtitle {
   background: linear-gradient(90deg, #6dd5ed, #2193b0);
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+/* Input section layout */
 .input-section {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* Empty message */
 #emptyMessage {
-  color: #f9e29c;
+  color: #ff8000;
   margin-top: 20px;
+  text-align: center;
 }
+
